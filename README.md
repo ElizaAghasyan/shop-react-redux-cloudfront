@@ -18,9 +18,9 @@ This is frontend starter project for nodejs-aws mentoring program. It uses the f
 
 
 # CloudFront and S3 links
-CloudFront: https://d2yt2eme1h3kb7.cloudfront.net
+CloudFront: https://dblh0zfovrq4v.cloudfront.net/index.html
 
-S3: https://cloud-dev-shop-react-redux-cloudfront.s3.amazonaws.com/
+S3: https://my-shop-aws.s3.amazonaws.com/index.html
 
 ## Available Scripts
 
