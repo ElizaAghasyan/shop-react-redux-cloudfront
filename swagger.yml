@@ -1,0 +1,47 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Product Service API"
+  description: "API documentation for the Product Service"
+basePath: "/api/v1"
+schemes:
+  - "http"
+paths:
+  /products:
+    get:
+      summary: "Get all products"
+      description: "Retrieve a list of all products."
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Product"
+  /products/{productId}:
+    get:
+      summary: "Get product by ID"
+      description: "Retrieve a specific product by its ID."
+      parameters:
+        - name: "productId"
+          in: "path"
+          description: "ID of the product to retrieve."
+          required: true
+          type: "integer"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            $ref: "#/definitions/Product"
+        404:
+          description: "Product not found"
+definitions:
+  Product:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      price:
+        type: "number"

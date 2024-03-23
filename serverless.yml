@@ -17,6 +17,23 @@ plugins:
   - serverless-single-page-app-plugin
   - serverless-s3-cleaner
 
+functions:
+  getProductsList:
+    handler: src/getProductsList.handler
+    events:
+      -http:
+        path: /products
+        method: get
+        cors: true
+
+  getProductsById:
+    handler: src/getProductsById.handler
+    events:
+      - http:
+          path: /products/{productId}
+          method: get
+          cors: true
+
 custom:
   client:
     bucketName: my-store-app
