@@ -5,9 +5,7 @@ frameworkVersion: "3"
 provider:
   name: aws
   runtime: nodejs14.x
-  region: eu-west-1
-  # setup profile for AWS CLI.
-  # profile: node-aws
+  region: us-east-1
 
 plugins:
   - serverless-finch
@@ -20,6 +18,9 @@ plugins:
 functions:
   getProductsList:
     handler: src/getProductsList.handler
+    environment:
+      PRODUCTS_TABLE: ${self:custom.productsTable}
+      STOCKS_TABLE: ${self:custom.stocksTable}
     events:
       -http:
         path: /products
@@ -28,11 +29,23 @@ functions:
 
   getProductsById:
     handler: src/getProductsById.handler
+    environment:
+      PRODUCTS_TABLE: ${self:custom.productsTable}
+      STOCKS_TABLE: ${self:custom.stocksTable}
     events:
       - http:
           path: /products/{productId}
           method: get
           cors: true
+
+  createProduct:
+    handler: src/createProduct.handler
+    events:
+      - http:
+          path: /products
+          method: post
+          cors: true
+          authorizer: aws_iam
 
 custom:
   client:
@@ -48,6 +61,30 @@ custom:
 
 resources:
   Resources:
+    ProductsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.productsTable}
+        AttributeDefinitions:
+            - AttributeName: id
+              AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    StocksTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.stocksTable}
+        AttributeDefinitions:
+          - AttributeName: product_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: product_id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
     ## Specifying the S3 Bucket
     WebAppS3Bucket:
       Type: AWS::S3::Bucket
